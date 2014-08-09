@@ -3,7 +3,6 @@ var http = require('http');
 var fs = require('fs');
 var nconf = require('nconf');
 var express = require('express');
-var merge = require('merge');
 var React = require('react');
 var { range } = require('lodash');
 var { go, chan, take, put, operations: ops } = require('./shared/csp');

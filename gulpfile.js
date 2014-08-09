@@ -68,8 +68,7 @@ function makeNodeStream(src, withSourcemaps) {
     .pipe(sourcemaps.init())
     .pipe(sweetjs({
       readableNames: true,
-      modules: ['es6-macros'],
-      readtables: ['jsx-reader']
+      modules: ['es6-macros']
     }))
     .pipe(regenerator())
     .pipe(jsheader('var wrapGenerator = require("regenerator/runtime/dev").wrapGenerator;'))

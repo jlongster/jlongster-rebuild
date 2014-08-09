@@ -18,7 +18,7 @@ var config = {
       {test: /\.js$/,
        exclude: [/static\/js\/lib\/.*\.js$/,
                  /node_modules\/.*/],
-       loader: 'regenerator!sweetjs?modules[]=es6-macros&readers[]=jsx-reader'},
+       loader: 'regenerator!sweetjs?modules[]=es6-macros'},
       {test: /\.less$/, loader: "style!css!less"},
       {test: /\.css$/, loader: "style!css"}
     ]
