@@ -41,18 +41,6 @@ function jsheader(text) {
   });
 }
 
-// gulp.task("repl", function() {
-//   var stream = es.through();
-//   setTimeout(function() {
-//     stream.write('var x = 5');
-//   }, 2000);
-
-//   return stream.pipe(sweetjs())
-//     .pipe(es.through(function(data) {
-//       console.log(data);
-//     }));
-// });
-
 gulp.task("regenerate", function() {
   gulp.src('node_modules/js-csp/src/**/*.js')
     .pipe(gulp.dest('static/js/shared/csp'))
