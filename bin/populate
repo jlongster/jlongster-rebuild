@@ -1,0 +1,65 @@
+#!/usr/bin/env node
+require("source-map-support");
+var wrapGenerator = require("regenerator/runtime/dev").wrapGenerator;
+var fs = require('fs');
+var _ = require('lodash');
+var moment = require('moment');
+var util = require('../build/util');
+var db = require('../build/db');
+var __ref = require('../build/csp');
+var go = __ref.go;
+var chan = __ref.chan;
+var take = __ref.take;
+var put = __ref.put;
+var ops = __ref.operations;
+__ref = null;
+var __ref$2 = require('../build/chan-util');
+var invokeCallbackM = __ref$2.invokeCallbackM;
+var takeArray = __ref$2.takeArray;
+__ref$2 = null;
+var ipsum = fs.readFileSync(__dirname + '/ipsum.txt', 'utf8');
+var len = ipsum.length;
+var posts = _.range(50).map(function (x) {
+        var idx = Math.random() * (len - 500) | 0;
+        var title = ipsum.slice(idx, idx + 30 + (Math.random() * 40 | 0));
+        return {
+            shorturl: util.slugify(title),
+            content: ipsum.slice(idx),
+            'abstract': ipsum.slice(idx + 20, idx + 300),
+            title: title,
+            published: 'y',
+            tags: ['foo'],
+            date: moment()
+        };
+    });
+go(wrapGenerator.mark(function callee$0$0() {
+    var client, curPosts, args$1$0 = arguments;
+
+    return wrapGenerator(function callee$0$0$(context$1$0) {
+        while (1) switch (context$1$0.prev = context$1$0.next) {
+        case 0:
+            client = db.client;
+            context$1$0.next = 3;
+            return take(invokeCallbackM(client, client.zrange, db.dbkey('posts'), 0, -1));
+        case 3:
+            curPosts = context$1$0.sent;
+            context$1$0.next = 6;
+
+            return takeArray(curPosts.map(function (__fa_args, post) {
+                return invokeCallbackM(client, client.del, db.dbkey('post', post));
+            }.bind(this, typeof args$1$0 !== 'undefined' ? args$1$0 : undefined)));
+        case 6:
+            context$1$0.next = 8;
+            return take(invokeCallbackM(client, client.del, db.dbkey('posts')));
+        case 8:
+            context$1$0.next = 10;
+            return takeArray(posts.map(db.savePost));
+        case 10:
+            console.log('done!');
+            db.quit();
+        case 12:
+        case "end":
+            return context$1$0.stop();
+        }
+    }, callee$0$0, this);
+}));
