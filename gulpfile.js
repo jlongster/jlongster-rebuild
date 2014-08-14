@@ -51,18 +51,18 @@ gulp.task("regenerate", function() {
     });
 });
 
-function makeNodeStream(src, withSourcemaps) {
+function makeNodeStream(src, withoutSourcemaps) {
   var stream = src.pipe(cache('src'))
-    .pipe(sourcemaps.init())
-    .pipe(sweetjs({
-      readableNames: true,
-      modules: ['es6-macros']
-    }))
-    .pipe(regenerator())
-    .pipe(jsheader('var wrapGenerator = require("regenerator/runtime/dev").wrapGenerator;'))
-    .pipe(jsheader('require("source-map-support");'));
+      .pipe(sourcemaps.init())
+      .pipe(sweetjs({
+        readableNames: true,
+        modules: ['es6-macros']
+      }))
+      .pipe(regenerator())
+      .pipe(jsheader('var wrapGenerator = require("regenerator/runtime/dev").wrapGenerator;'))
+      .pipe(jsheader('require("source-map-support");'));
 
-  if(withSourcemaps) {
+  if(!withoutSourcemaps) {
     stream = stream.pipe(sourcemaps.write('.'));
   }
   return stream;
@@ -82,7 +82,7 @@ gulp.task("src", function(cb) {
 });
 
 gulp.task("bin", function() {
-  makeNodeStream(gulp.src('bin/**/*.js'), false)
+  makeNodeStream(gulp.src('bin/**/*.js'), true)
     .pipe(header('#!/usr/bin/env node\n'))
     .pipe(rename(function(path) {
       if(path.extname == '.js') {

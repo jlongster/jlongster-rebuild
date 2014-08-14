@@ -8,9 +8,6 @@ var config = {
   },
   resolve: {
     extensions: ['', '.js', '.sjs'],
-    // alias: {
-    //   csp: '../../build/csp'
-    // },
     fallback: __dirname
   },
   module: {

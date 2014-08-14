@@ -5,15 +5,11 @@ var { takeAll } = require('./shared/chan-util');
 
 var methods = {
   posts: (opts) => {
-    var ch = chan();
-    go(function*() {
-      var inChan = db.getPosts();
-      if(opts.limit) {
-        inChan = ops.take(opts.limit, inChan);
-      }
+    var ch = db.getPosts();
+    if(opts.limit) {
+      ch = ops.take(opts.limit, ch);
+    }
 
-      ops.pipe(inChan, ch);
-    });
     return ch;
   },
 
