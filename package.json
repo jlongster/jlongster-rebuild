@@ -25,6 +25,7 @@
     "react": "^0.11.1",
     "redis": "^0.11.0",
     "regenerator": "^0.4.12",
-    "source-map-support": "^0.2.7"
+    "source-map-support": "^0.2.7",
+    "sweet.js": "^0.7.0"
   }
 }
